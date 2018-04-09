@@ -95,7 +95,8 @@
             
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
             {
-                var solarSystemObject = Instantiate(SolarSystemPrefab, hit.Pose.position, hit.Pose.rotation);
+                var solarSystemObject = Instantiate(SolarSystemPrefab, 
+                    new Vector3(hit.Pose.position.x, hit.Pose.position.y + 1.5f, hit.Pose.position.z), hit.Pose.rotation);
 
                 // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
                 // world evolves.
@@ -106,7 +107,7 @@
                 {
                     // Get the camera position and match the y-component with the hit position.
                     Vector3 cameraPositionSameY = FirstPersonCamera.transform.position;
-                    cameraPositionSameY.y = hit.Pose.position.y;
+                    cameraPositionSameY.y = hit.Pose.position.y + 1.5f;
 
                     // Have the solar system face toward the camera respecting its "up" perspective, which may be from ceiling.
                     solarSystemObject.transform.LookAt(cameraPositionSameY, solarSystemObject.transform.up);
