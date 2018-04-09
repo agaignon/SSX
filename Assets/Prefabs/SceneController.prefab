@@ -19,7 +19,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4324621057596756}
-  - component: {fileID: 114787740527198128}
+  - component: {fileID: 114452759673829582}
   m_Layer: 0
   m_Name: SceneController
   m_TagString: Untagged
@@ -40,7 +40,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114787740527198128
+--- !u!114 &114452759673829582
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -48,11 +48,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1306251676354368}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26074b15f9c13404d858bfedb8b8c00c, type: 3}
+  m_Script: {fileID: 11500000, guid: 639afb899e6155740be19534c56ab237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   FirstPersonCamera: {fileID: 0}
-  TrackedPlanePrefab: {fileID: 0}
-  AndyAndroidPrefab: {fileID: 1333785340745040, guid: 2610698406ca74544971d785b296009b,
+  SolarSystemPrefab: {fileID: 1333785340745040, guid: 2610698406ca74544971d785b296009b,
     type: 2}
   SearchingForPlaneUI: {fileID: 0}

@@ -26,6 +26,7 @@ namespace GoogleARCore.HelloAR
     using UnityEngine.Rendering;
 
 #if UNITY_EDITOR
+    // Set up touch input propagation while using Instant Preview in the editor.
     using Input = InstantPreviewInput;
 #endif
 
@@ -76,6 +77,7 @@ namespace GoogleARCore.HelloAR
         /// </summary>
         public void Update()
         {
+            // Exit the app when the 'back' button is pressed.
             if (Input.GetKey(KeyCode.Escape))
             {
                 Application.Quit();
@@ -99,18 +101,18 @@ namespace GoogleARCore.HelloAR
             Screen.sleepTimeout = SleepTimeout.NeverSleep;
 
             // Iterate over planes found in this frame and instantiate corresponding GameObjects to visualize them.
-            //Session.GetTrackables<TrackedPlane>(m_NewPlanes, TrackableQueryFilter.New);
-            //for (int i = 0; i < m_NewPlanes.Count; i++)
-            //{
-            //    // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
-            //    // the origin with an identity rotation since the mesh for our prefab is updated in Unity World
-            //    // coordinates.
-            //    GameObject planeObject = Instantiate(TrackedPlanePrefab, Vector3.zero, Quaternion.identity,
-            //        transform);
-            //    planeObject.GetComponent<TrackedPlaneVisualizer>().Initialize(m_NewPlanes[i]);
-            //}
+            Session.GetTrackables<TrackedPlane>(m_NewPlanes, TrackableQueryFilter.New);
+            for (int i = 0; i < m_NewPlanes.Count; i++)
+            {
+                // Instantiate a plane visualization prefab and set it to track the new plane. The transform is set to
+                // the origin with an identity rotation since the mesh for our prefab is updated in Unity World
+                // coordinates.
+                GameObject planeObject = Instantiate(TrackedPlanePrefab, Vector3.zero, Quaternion.identity,
+                    transform);
+                planeObject.GetComponent<TrackedPlaneVisualizer>().Initialize(m_NewPlanes[i]);
+            }
 
-            // Disable the snackbar UI when no planes are valid.
+            // Hide snackbar when currently tracking at least one plane.
             Session.GetTrackables<TrackedPlane>(m_AllPlanes);
             bool showSearchingUI = true;
             for (int i = 0; i < m_AllPlanes.Count; i++)
