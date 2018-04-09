@@ -41,6 +41,11 @@
         private bool m_IsQuitting = false;
 
         /// <summary>
+        /// True if the solar system model has already been initialized, otherwise false.
+        /// </summary>
+        private bool solarSystemInitialized = false;
+
+        /// <summary>
         /// The Unity Update() method.
         /// </summary>
         public void Update()
@@ -88,33 +93,41 @@
                 return;
             }
 
-            // Raycast against the location the player touched to search for planes.
-            TrackableHit hit;
-            TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
-                TrackableHitFlags.FeaturePointWithSurfaceNormal;
-            
-            if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
+            // Initializes the solar system model only if it hasn't been already to avoid duplicates
+            if (!solarSystemInitialized)
             {
-                var solarSystemObject = Instantiate(SolarSystemPrefab, 
-                    new Vector3(hit.Pose.position.x, hit.Pose.position.y + 1.5f, hit.Pose.position.z), hit.Pose.rotation);
-
-                // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
-                // world evolves.
-                var anchor = hit.Trackable.CreateAnchor(hit.Pose);
-
-                // The solar system should be facing the camera but still be flush with the plane.
-                if ((hit.Flags & TrackableHitFlags.PlaneWithinPolygon) != TrackableHitFlags.None)
+                // Raycast against the location the player touched to search for planes.
+                TrackableHit hit;
+                TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
+                    TrackableHitFlags.FeaturePointWithSurfaceNormal;
+                
+                if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
                 {
-                    // Get the camera position and match the y-component with the hit position.
-                    Vector3 cameraPositionSameY = FirstPersonCamera.transform.position;
-                    cameraPositionSameY.y = hit.Pose.position.y + 1.5f;
+                    // Instantiates the solar system model with a y offset of 1.5m to be in the air.
+                    var solarSystemObject = Instantiate(SolarSystemPrefab, 
+                        new Vector3(hit.Pose.position.x, hit.Pose.position.y + 1.5f, hit.Pose.position.z), hit.Pose.rotation);
 
-                    // Have the solar system face toward the camera respecting its "up" perspective, which may be from ceiling.
-                    solarSystemObject.transform.LookAt(cameraPositionSameY, solarSystemObject.transform.up);
+                    // Create an anchor to allow ARCore to track the hitpoint as understanding of the physical
+                    // world evolves.
+                    var anchor = hit.Trackable.CreateAnchor(hit.Pose);
+
+                    // The solar system should be facing the camera but still be flush with the plane.
+                    if ((hit.Flags & TrackableHitFlags.PlaneWithinPolygon) != TrackableHitFlags.None)
+                    {
+                        // Get the camera position and match the y-component with the hit position with 1.5m offset.
+                        Vector3 cameraPositionSameY = FirstPersonCamera.transform.position;
+                        cameraPositionSameY.y = hit.Pose.position.y + 1.5f;
+
+                        // Have the solar system face toward the camera respecting its "up" perspective, which may be from ceiling.
+                        solarSystemObject.transform.LookAt(cameraPositionSameY, solarSystemObject.transform.up);
+                    }
+
+                    // Make the solar system model a child of the anchor.
+                    solarSystemObject.transform.parent = anchor.transform;
+                    
+                    // Unless the app restarts this block of code won't be executed again
+                    solarSystemInitialized = true;
                 }
-
-                // Make the solar system model a child of the anchor.
-                solarSystemObject.transform.parent = anchor.transform;
             }
         }
 
