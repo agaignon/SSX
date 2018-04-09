@@ -92,8 +92,7 @@
             TrackableHit hit;
             TrackableHitFlags raycastFilter = TrackableHitFlags.PlaneWithinPolygon |
                 TrackableHitFlags.FeaturePointWithSurfaceNormal;
-
-            // Offsets the y position of the hit to instantiate the solar system model mid air
+            
             if (Frame.Raycast(touch.position.x, touch.position.y, raycastFilter, out hit))
             {
                 var solarSystemObject = Instantiate(SolarSystemPrefab, hit.Pose.position, hit.Pose.rotation);
