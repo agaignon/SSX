@@ -7,6 +7,7 @@ public class BuildScript {
 
     public static void BuildSSX () {
         
+        EditorApplication.Exit(1);
         System.Console.WriteLine("Setting SDK and JDK paths");
         EditorPrefs.SetString("AndroidSdkRoot", "/opt/Android/android-sdk");
         EditorPrefs.SetString("JdkPath", "/usr/lib/jvm/java-8-openjdk-amd64");
